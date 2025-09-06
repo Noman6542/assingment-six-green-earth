@@ -12,7 +12,44 @@
   <title>Green Earth</title>
 </head>
 <body>
-  <h1>document</h1>
+ <header>
+  <div class="navbar bg-[#15803d] text-white shadow-sm py-10 px-8">
+    
+    <div class="navbar-start">
+      <a class="text-xl">🌱 Green Earth</a>
+    </div>
+
+    <div class="navbar-center hidden lg:flex gap-6">
+      <a href="#" class="">About</a>
+      <a href="#" class="">Gallery</a>
+      <a href="#" class="">Plant a Tree</a>
+    </div>
+
+    <div class="navbar-end">
+      <button class="btn bg-[#facc15] rounded-full text-[#15803d] border-none">
+        Plant a Tree
+      </button>
+    </div>
+
+  </div>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-3 items-center bg-[#CFF0DC] gap-8">
+  <div class="img hidden md:block">
+    <img src="./assets/hero-leaf1.png" alt="" srcset="">
+
+  </div>
+  <div class="flex flex-col items-center text-center gap-4">
+    <h1 class="font-bold text-[40px] md:whitespace-nowrap">Plant a Tree, Grow a Future</h1>
+    <p class="text-[rgba(31,41,55,0.8)]">Join our mission to plant 1 million trees and make the Earth greener for future
+    generations.</p>
+    <button class="btn btn-active btn-secondary bg-[#facc15] text-[#15803d] border-none rounded-full">Get Involved</button>
+
+  </div>
+  <div class="img hidden md:block">
+    <img src="./assets/hero-leaf2.png" alt="" srcset="">
+  </div>
+</section>
+
 
   <script src="java.js"></script>
 </body>
