@@ -1,11 +1,16 @@
 
 // card container 
 const allplanets =()=>{
+  toggleSpinner(true); 
   fetch('https://openapi.programming-hero.com/api/plants')
   .then(res=>res.json())
   .then(datas=>cards(datas.plants)
+  
+   
   )
 }
+
+
 
 const cards = (plants) => {
   const cardContainer = document.getElementById('card-container');
@@ -23,7 +28,7 @@ const cards = (plants) => {
         <div class="mt-4">
           <div class="flex justify-between items-center">
             <h1 class="text-[#15806A] bg-[#DCFCE7] text-center py-2 px-4 rounded-full">${plant.category}</h1>
-            <h1 class="font-semibold"><span>৳</span>${plant.price}</h1>
+            <h1 class="font-semibold price-btn"><span>৳</span>${plant.price}</h1>
           </div>
           <button class="btn btn-wide bg-[#15803d] text-white border-none rounded-full mt-3 w-full">
             Add to Cart
@@ -32,9 +37,21 @@ const cards = (plants) => {
       </div>
     `;
   }
+  toggleSpinner(false);
 }
 
 // spinner 
+
+const toggleSpinner = (status) => {
+  
+  if(status==true) {
+   document.getElementById('spinner').classList.remove('hidden');
+   document.getElementById('card-container').classList.add('hidden');
+  } else {
+    document.getElementById('card-container').classList.remove('hidden');
+   document.getElementById('spinner').classList.add('hidden');
+  }
+};
 
 
 // modal 
@@ -68,6 +85,7 @@ allplanets();
 
 // categories 
 const allbuttons = ()=>{
+  toggleSpinner(true);
   fetch('https://openapi.programming-hero.com/api/categories')
   .then(res=>res.json())
   .then(button=>buttons(button.categories))
@@ -76,12 +94,6 @@ const allbuttons = ()=>{
 
 const buttons =(allCategories)=>{
    const container = document.getElementById('category-container');
-  container.innerHTML =`<button 
-        class="btn category-btn active text-[#1f2937] px-5 py-2 w-full"
-        data-id="all">
-        All
-      </button>
-   `;
   for(let button of allCategories){
      container.innerHTML += `
       <button 
@@ -91,6 +103,7 @@ const buttons =(allCategories)=>{
     </button>
   `;
   }
+  toggleSpinner(false);
 }
 
 // active button 
@@ -98,8 +111,9 @@ const buttons =(allCategories)=>{
 const container = document.getElementById('category-container');
 
 container.addEventListener('click', function (e) {
+  toggleSpinner(true);
   if (e.target.classList.contains('category-btn')) {
-   
+  
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.classList.remove('active');
     });
@@ -113,8 +127,10 @@ container.addEventListener('click', function (e) {
       fetch(`https://openapi.programming-hero.com/api/category/${categoryId}`)
       .then(res => res.json())
       .then(data => cards(data.plants));
+      
     }
   }
+  toggleSpinner(false); 
 });
 
 
@@ -124,6 +140,56 @@ allbuttons();
 
 
 
+// your cart 
+let cart = [];
+
+
+document.getElementById('card-container').addEventListener('click', function(e){
+  if(e.target.innerText.includes("Add to Cart")){
+    const card = e.target.closest('.card');
+    const plantName = card.querySelector('.card-detail').innerText;
+    const plantPriceText = card.querySelector('.price-btn').innerText;
+const plantPrice = parseInt(plantPriceText.replace('৳','')) || 0;
+
+    const alertToAdd = confirm(`${plantName} has been added to your cart.`);
+    
+    if(alertToAdd){
+      cart.push({ name: plantName, price: plantPrice }); 
+      updateCart(); 
+    }
+    
+  }
+});
+
+function updateCart(){
+  const cartContainer = document.getElementById('cart-items');
+  cartContainer.innerHTML = ''; 
+
+  let total = 0;
+  cart.forEach((item, index) => {
+    total += item.price;
+    cartContainer.innerHTML += `
+      <div class="flex justify-between items-center px-3 py-2 bg-[#F0FDF4] rounded-[8px]">
+        <div>
+          <h1 class="mb-1">${item.name}</h1>
+          <p class="text-[#8C8C8C]">৳${item.price ? item.price : 0} x 1</p>
+
+        </div>
+        <div>
+          <button onclick="removeCartItem(${index})"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('cart-total').innerText = total;
+}
+
+
+function removeCartItem(index){
+  cart.splice(index, 1); 
+  updateCart(); 
+}
 
 
 
