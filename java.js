@@ -1,13 +1,15 @@
 
 // card container 
-const allplanets =()=>{
+const allplanets =()=> {
   toggleSpinner(true); 
   fetch('https://openapi.programming-hero.com/api/plants')
   .then(res=>res.json())
-  .then(datas=>cards(datas.plants)
+  .then(datas=>{
+     cards(datas.plants); 
+     toggleSpinner(false);
+  })
   
-   
-  )
+  
 }
 
 
@@ -37,7 +39,7 @@ const cards = (plants) => {
       </div>
     `;
   }
-  toggleSpinner(false);
+  
 }
 
 // spinner 
@@ -126,11 +128,14 @@ container.addEventListener('click', function (e) {
     }else{
       fetch(`https://openapi.programming-hero.com/api/category/${categoryId}`)
       .then(res => res.json())
-      .then(data => cards(data.plants));
-      
+      .then(data => {
+        cards(data.plants);
+       toggleSpinner(false); 
+      });
+     
     }
   }
-  toggleSpinner(false); 
+  
 });
 
 
